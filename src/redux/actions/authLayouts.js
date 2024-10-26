@@ -2,14 +2,17 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api, { buildURL } from '../../koneksi';
 
 // Membuat async thunk untuk login
-export const loginAsync = createAsyncThunk('auth/login', async (userData) => {
+export const loginAsync = createAsyncThunk('auth/login', async (formData) => {
     try {
-        const response = await api.post(buildURL('/login'), userData);
-        return response.data;
+      const response = await api.post(buildURL('/login'), formData, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      });
+      return response.data;
     } catch (error) {
-        throw new Error(error.response.data.messages); // Throw error with message from backend
+      throw new Error(error.response.data.message);
     }
-});
+  });
+
 
 
 export const addUserAsync = createAsyncThunk('auth/addUser', async (newUser, { rejectWithValue }) => {
@@ -33,6 +36,7 @@ const authSlice = createSlice({
         data: [],
         status: 'idle',
         error: null,
+        accessToken: localStorage.getItem('accessToken'),
     },
     reducers: {
     },
@@ -44,7 +48,9 @@ const authSlice = createSlice({
                 })
                 .addCase(loginAsync.fulfilled, (state, action) => {
                     state.status = 'succeeded';
-                    state.data = action.payload.data;
+                    state.data = action.payload;
+                    // Menyimpan access access_token ke local storage
+                    localStorage.setItem('accessToken', action.payload.token);
                 })
                 .addCase(loginAsync.rejected, (state, action) => {
                     state.status = 'failed';
