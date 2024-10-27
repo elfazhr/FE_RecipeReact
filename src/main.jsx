@@ -7,6 +7,7 @@ import store from './store';
 import LoginPage from './pages/login';
 import RegisterPage from './pages/register';
 import Dashboard from './pages/dashboard';
+import AddRecipes from './pages/addRecipes';
 
 const routes = [
   {
@@ -20,6 +21,10 @@ const routes = [
   {
     path: "/dashboard",
     element: <Dashboard />
+  },
+  {
+    path: "/addRecipes",
+    element: <AddRecipes />
   }
 ];
 const router = createBrowserRouter(routes);

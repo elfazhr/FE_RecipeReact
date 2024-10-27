@@ -5,6 +5,9 @@ import Footer from '../fragments/Footer'
 import CardLayouts from '../layouts/CardLayouts'
 
 const Dashboard = () => {
+  const handleNavigate = () => {
+    window.location.href = '/addRecipes'; // Mengarahkan pengguna ke halaman /addRecipes
+  };
   return (
     <div className='w-full px-10 py-6 flex flex-col gap-12'>
       <Navbar />
@@ -19,7 +22,7 @@ const Dashboard = () => {
       <div className='w-full'>
         <div className='flex flex-col rounded-lg justify-center items-center bg-slate-200 p-10 gap-4'>
           <p className='text-2xl font-bold text-gray-800'>Share Your Own Recipes!</p>
-          <Button style='bg-gray-700 text-white hover:bg-gray-900 transition-colors text-sm'>Write a Recipe</Button>
+          <Button style='bg-gray-700 text-white hover:bg-gray-900 transition-colors text-sm' onClick={handleNavigate} >Write a Recipe</Button>
         </div>
       </div>
       <div className='w-full flex justify-between items-center gap-4 border-b border-gray-300 pb-6'>
