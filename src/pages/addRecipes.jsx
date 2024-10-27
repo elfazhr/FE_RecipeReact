@@ -64,18 +64,17 @@ const AddRecipes = () => {
         formData.append('directions', newRecipe.directions);
         formData.append('recipe_pic', newRecipe.recipe_pic);
         try {
-            // Simulasikan penyimpanan data ke database
             await dispatch(addRecipeAsync(formData));
-
             Swal.fire({
                 icon: 'success',
                 title: message.successMessage,
                 showConfirmButton: false,
                 timer: 1500,
+            }).then(() => {
+                // Ketika alert sudah ditutup, tutup AlertSave dan arahkan ke dashboard
+                handleCloseAlert();
+                window.location.href = '/dashboard';
             });
-
-            // Tutup komponen AlertSave dan form
-            handleCloseAlert();
         } catch (error) {
             console.error('Error saving data:', error);
             // Tampilkan pesan kesalahan

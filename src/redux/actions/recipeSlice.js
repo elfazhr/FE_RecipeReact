@@ -21,6 +21,19 @@ export const addRecipeAsync = createAsyncThunk('recipes/addRecipe', async (newRe
     }
 });
 
+export const dataGlobal = async (url) => {
+    const accessToken = localStorage.getItem('accessToken');
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+  
+    const response = await api.get(url, config);
+    return response.data.recipes; // Langsung mengembalikan data 'recipes'
+  };
+  
+
 const recipeSlice = createSlice({
     name: 'recipes',
     initialState: {
