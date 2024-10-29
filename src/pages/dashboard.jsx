@@ -17,6 +17,9 @@ const Dashboard = () => {
     buildURL(`/recipes${selectedCategory ? `?category=${selectedCategory}` : ''}`),
     dataGlobal
   );
+  const DetailClick = (recipe_id) => {
+    window.location.href = `/recipe/${recipe_id}`;
+  }
 
   if (error) return <p>Error loading recipes...</p>;
   const formatDate = (dateString) => {
@@ -68,16 +71,22 @@ const Dashboard = () => {
 
         </div>
       </div>
-
-      <div className='grid grid-cols-3 justify-items-center gap-16'>
-        {recipes.map((item, index) => (
-          <CardLayouts key={index} image={item.recipe_pic}>
-            <CardLayouts.TitleCard title={item.recipe_name} />
-            <CardLayouts.BodyCard desc={item.desc} />
-            <CardLayouts.FooterCard category={item.category} date={formatDate(item.date_created)} dateCreated={item.date_created} />
-          </CardLayouts>
-        ))}
-      </div>
+      {recipes.length > 0 ? (
+        <div className='grid grid-cols-3 justify-items-center gap-16'>
+          {recipes.map((item, index) => (
+            <CardLayouts key={index} image={item.recipe_pic} onClick={() => DetailClick(item._id)}>
+              <CardLayouts.TitleCard title={item.recipe_name} />
+              <CardLayouts.BodyCard desc={item.desc} />
+              <CardLayouts.FooterCard category={item.category} date={formatDate(item.date_created)} dateCreated={item.date_created} />
+            </CardLayouts>
+          ))}
+        </div>
+      ) : (
+        <div className='w-full flex flex-col justify-center items-center space-y-4'>
+          <img src="/img/empty.png" alt="" className='h-36 opacity-70' />
+          <p className='text-md font-semibold text-gray-700 capitalize'>No recipes found</p>
+        </div>
+      )}
       <Footer />
 
 

@@ -49,6 +49,7 @@ const authSlice = createSlice({
                 .addCase(loginAsync.fulfilled, (state, action) => {
                     state.status = 'succeeded';
                     state.data = action.payload;
+                    state.user = action.payload; // Assuming the user info is returned here
                     // Menyimpan access access_token ke local storage
                     localStorage.setItem('accessToken', action.payload.token);
                 })

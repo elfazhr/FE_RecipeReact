@@ -8,6 +8,8 @@ import LoginPage from './pages/login';
 import RegisterPage from './pages/register';
 import Dashboard from './pages/dashboard';
 import AddRecipes from './pages/addRecipes';
+import Detail from './pages/detail';
+import EditRecipes from './pages/editRecipes';
 
 const routes = [
   {
@@ -25,6 +27,14 @@ const routes = [
   {
     path: "/addRecipes",
     element: <AddRecipes />
+  }, 
+  {
+    path: "/recipe/:recipe_id",
+    element: <Detail />
+  }, 
+  {
+    path: "/edit/:recipe_id",
+    element: <EditRecipes />
   }
 ];
 const router = createBrowserRouter(routes);

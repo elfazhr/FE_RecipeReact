@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Label from './Label'
 import { FaAngleDown } from 'react-icons/fa6';
 
@@ -6,7 +6,12 @@ const DropDown = (props) => {
     const { judulLabel, name, isiSpan, options, value, onChange } = props;
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState(value || ''); // Inisialisasi nilai dengan prop value
-
+    // Sync selectedOption with the prop value when it changes
+    useEffect(() => {
+        if (value) {
+            setSelectedOption(value);
+        }
+    }, [value]);
     const handleSelect = (option) => {
         setSelectedOption(option);
         onChange(option);
@@ -15,7 +20,7 @@ const DropDown = (props) => {
 
     const isOptionSelected = (option) => {
         return selectedOption === option;
-      };
+    };
 
 
     return (
@@ -62,11 +67,10 @@ const DropDown = (props) => {
                             {options.map((option, index) => (
                                 <li
                                     key={index}
-                                    className={`px-4 py-2 cursor-pointer ${
-                                        isOptionSelected(option)
-                                          ? 'bg-slate-100 text-[#EB4D1C]'
-                                          : 'hover:bg-slate-100 hover:text-[#EB4D1C]'
-                                      }
+                                    className={`px-4 py-2 cursor-pointer ${isOptionSelected(option)
+                                            ? 'bg-slate-100 text-[#EB4D1C]'
+                                            : 'hover:bg-slate-100 hover:text-[#EB4D1C]'
+                                        }
                                      uppercase`}
                                     onClick={() =>
                                         handleSelect(option)
