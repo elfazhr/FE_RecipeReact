@@ -44,6 +44,23 @@ export const addUserAsync = createAsyncThunk('auth/addUser', async (newUser, { r
         }
     }
 });
+
+export const updateProfileAsync = createAsyncThunk('auth/updateProfile', async ({_id, updatedData}, {getState}) => {
+    try {
+        const { auth } = getState(); // Mendapatkan state autentikasi dari store
+        const { accessToken } = auth; // Mendapatkan token dari state autentikasi
+        const config = {
+            headers: {
+                Authorization: `Bearer ${accessToken}`, // Menambahkan token ke header Authorization
+            }
+        };
+        const response = await api.put(buildURL('/update_profile'), updatedData, config);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.message); // Throw error with message from backend
+    }
+});
+
 export const dataUser = async (url) => {
     const accessToken = localStorage.getItem('accessToken');
     const config = {
@@ -101,6 +118,21 @@ const authSlice = createSlice({
                     state.status = 'failed';
                     state.error = action.payload;
                 })
+                .addCase(updateProfileAsync.pending, (state) => {
+                    state.status = 'loading';
+                })
+                .addCase(updateProfileAsync.fulfilled, (state, action) => {
+                    state.status = 'succeeded';
+                    // Update data siswa dengan data yang baru
+                    state.data = state.data.map((profile) =>
+                        profile._id === action.payload.data._id ? action.payload : profile
+                    );
+                    
+                })
+                .addCase(updateProfileAsync.rejected, (state, action) => {
+                    state.status = 'failed';
+                    state.error = action.error.message;
+                });
         },
 
 });

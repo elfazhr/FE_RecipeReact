@@ -95,8 +95,8 @@ const AddRecipes = () => {
             if (file.size > 2 * 1024 * 1024) {
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Ukuran file terlalu besar',
-                    text: 'Ukuran file tidak boleh melebihi 2 MB',
+                    title: 'File too large',
+                    text: 'File size cannot exceed 2 MB',
                     showConfirmButton: true,
                 });
                 return;

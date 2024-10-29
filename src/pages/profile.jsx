@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import useSWR from 'swr';
 import { buildURL } from '../koneksi';
 import { dataUser } from '../redux/actions/authLayouts';
@@ -11,15 +11,25 @@ import { FaArrowRight } from 'react-icons/fa6';
 import CardLayouts from '../layouts/CardLayouts';
 import Footer from '../fragments/Footer';
 import { dataGlobal } from '../redux/actions/recipeSlice';
+import ModalLayouts from '../fragments/ModalLayouts';
+import FormEditProfile from '../fragments/FormEditProfile';
 
 const Profile = () => {
     const { identifier } = useParams();
-    const { data: user = {}, isLoading } = useSWR(buildURL(`/user/${identifier}`), dataUser);
+    const { data: user = {}, isLoading } = useSWR(buildURL(`/user/${identifier}`), dataUser, {refreshInterval: 5000});
     const { data: recipes = [], error } = useSWR(
         buildURL(`/recipes${user.username ? `?user=${user.username}` : ''}`),
         dataGlobal
     );
-    console.log(user)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedProfile, setSelectedProfile] = useState(null);
+    const handleEditClick = (user) => {
+        setSelectedProfile(user);
+        setIsEditModalOpen(true);
+    };
+    const closeModal = () => {
+        setIsEditModalOpen(false);
+    };
     if (isLoading) {
         return (
             <div className='w-full min-h-screen flex flex-col justify-center items-center'>
@@ -49,14 +59,14 @@ const Profile = () => {
                 <div className='h-40 w-full border border-gray-400 py-4 px-8 rounded-lg flex items-center justify-between'>
                     <div className='flex gap-4 items-center '>
                         {!user.profile_pic ? (
-                            <div className=' w-24 h-24 rounded-full flex justify-center items-center bg-gray-300'>
+                            <div className='w-24 h-24 rounded-full flex justify-center items-center bg-gray-300'>
                                 <div className='w-14 h-14 border-2 border-white rounded-full flex items-center justify-center'>
                                     <CiImageOn size={40} color='white' />
                                 </div>
                             </div>
                         ) : (
                             <div className='w-24 h-24 rounded-full '>
-                                <img src={user.profile_pic} alt="Preview" className='w-24 object-cover rounded-full' />
+                                <img src={user.profile_picture} alt="Preview" className='w-24 h-24 object-cover rounded-full' />
                             </div>
                         )}
 
@@ -68,7 +78,7 @@ const Profile = () => {
                     </div>
                     {/* Tombol hanya muncul jika pengguna adalah pemilik resep */}
                     {user._id === userLoginId &&
-                        <Button text='Edit Profile' style="flex items-center gap-2 bg-gray-600 hover:bg-gray-500">
+                        <Button text='Edit Profile' style="flex items-center gap-2 bg-gray-600 hover:bg-gray-500" onClick={() => handleEditClick(user)}>
                             <p className='text-sm text-white'>Edit Profile</p>
                             <FaArrowRight size={16} color='white' />
                         </Button>
@@ -96,6 +106,11 @@ const Profile = () => {
                 </div>
             </div>
             <Footer />
+            {isEditModalOpen && (
+                <ModalLayouts onClose={closeModal} judulForm="Edit Data Menu">
+                    <FormEditProfile selectedProfile={selectedProfile} onClose={closeModal} />
+                </ModalLayouts>
+            )}
         </div>
     )
 }

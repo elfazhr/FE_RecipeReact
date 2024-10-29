@@ -153,8 +153,8 @@ const EditRecipes = () => {
                 // Menampilkan peringatan jika ukuran melebihi batas
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Ukuran file terlalu besar',
-                    text: 'Ukuran file tidak boleh melebihi 2 MB',
+                    title: 'File too large',
+                    text: 'File size cannot exceed 2 MB',
                     showConfirmButton: true,
                 });
                 return; // Menghentikan proses lebih lanjut
