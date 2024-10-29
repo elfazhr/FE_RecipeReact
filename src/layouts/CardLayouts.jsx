@@ -3,7 +3,7 @@ import React from 'react'
 const CardLayouts = (props) => {
     const { children, image, onClick} = props;
     return (
-        <div className='w-full flex flex-col bg-gray-50 shadow-sm hover:bg-gray-100 hover:cursor-pointer' onClick={onClick}>
+        <div className='w-full flex flex-col bg-gray-50 shadow-sm hover:bg-gray-100 hover:cursor-pointer rounded-b-md' onClick={onClick}>
             <img src={image} alt="" className='h-[200px] w-full object-cover' />
             <div className='flex flex-col p-4 mb-2 w-full h-full'>
                 {children}

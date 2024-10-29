@@ -1,17 +1,33 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api, { buildURL } from '../../koneksi';
+import { jwtDecode } from 'jwt-decode';
 
 // Membuat async thunk untuk login
 export const loginAsync = createAsyncThunk('auth/login', async (formData) => {
     try {
-      const response = await api.post(buildURL('/login'), formData, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      });
-      return response.data;
+        const response = await api.post(buildURL('/login'), formData, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+
+        // Ambil token dari respons
+        const { token } = response.data;
+
+        // Simpan token ke local storage
+        localStorage.setItem('accessToken', token);
+
+        // Dekode token untuk mendapatkan user_id
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.user_id; // Ambil user_id dari payload
+
+        // Simpan user_id ke local storage
+        localStorage.setItem('user_id', userId);
+
+        // Kembalikan userId untuk disimpan di Redux
+        return { token, userId }; // Mengembalikan token dan userId
     } catch (error) {
-      throw new Error(error.response.data.message);
+        throw new Error(error.response.data.message);
     }
-  });
+});
 
 
 
@@ -28,6 +44,18 @@ export const addUserAsync = createAsyncThunk('auth/addUser', async (newUser, { r
         }
     }
 });
+export const dataUser = async (url) => {
+    const accessToken = localStorage.getItem('accessToken');
+    const config = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    };
+
+    const response = await api.get(url, config);
+    return response.data.user; // Langsung mengembalikan data 'recipes'
+};
+
 
 
 const authSlice = createSlice({
@@ -39,6 +67,12 @@ const authSlice = createSlice({
         accessToken: localStorage.getItem('accessToken'),
     },
     reducers: {
+        logout(state) {
+            state.data = null;
+            state.accessToken = null;
+            localStorage.removeItem('userData'); // Hapus dari localStorage
+            localStorage.removeItem('accessToken'); // Hapus token dari localStorage
+        },
     },
     extraReducers:
         (builder) => {
@@ -49,9 +83,7 @@ const authSlice = createSlice({
                 .addCase(loginAsync.fulfilled, (state, action) => {
                     state.status = 'succeeded';
                     state.data = action.payload;
-                    state.user = action.payload; // Assuming the user info is returned here
-                    // Menyimpan access access_token ke local storage
-                    localStorage.setItem('accessToken', action.payload.token);
+
                 })
                 .addCase(loginAsync.rejected, (state, action) => {
                     state.status = 'failed';
@@ -72,6 +104,6 @@ const authSlice = createSlice({
         },
 
 });
-
+export const { logout } = authSlice.actions; // Ekspor action logout
 // Ekspor reducer
 export default authSlice.reducer;

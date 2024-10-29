@@ -54,6 +54,8 @@ export const updateRecipeAsync = createAsyncThunk('recipes/updateRecipe', async 
 });
 
 
+
+
 export const dataGlobal = async (url) => {
     const accessToken = localStorage.getItem('accessToken');
     const config = {

@@ -10,6 +10,7 @@ import Dashboard from './pages/dashboard';
 import AddRecipes from './pages/addRecipes';
 import Detail from './pages/detail';
 import EditRecipes from './pages/editRecipes';
+import Profile from './pages/profile';
 
 const routes = [
   {
@@ -35,6 +36,10 @@ const routes = [
   {
     path: "/edit/:recipe_id",
     element: <EditRecipes />
+  }, 
+  {
+    path:"/profile/:identifier",
+    element: <Profile />
   }
 ];
 const router = createBrowserRouter(routes);

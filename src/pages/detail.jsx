@@ -1,6 +1,6 @@
 import React from 'react'
 import { CiImageOn } from 'react-icons/ci';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Navbar from '../fragments/Navbar';
 import { MdOutlineEdit, MdOutlineRoomService } from 'react-icons/md';
 import { FiClock } from 'react-icons/fi';
@@ -10,12 +10,13 @@ import { dataDetail, deleteRecipeAsync } from '../redux/actions/recipeSlice';
 import { buildURL } from '../koneksi';
 import useSWR from 'swr';
 import Swal from 'sweetalert2';
+import Footer from '../fragments/Footer';
 
 const Detail = () => {
     const { recipe_id } = useParams();
     const dispatch = useDispatch();
     const { data: recipe = {}, isLoading } = useSWR(buildURL(`/recipes/${recipe_id}`), dataDetail);
-  
+
     if (isLoading) {
         return (
             <div className='w-full min-h-screen flex flex-col justify-center items-center'>
@@ -61,7 +62,7 @@ const Detail = () => {
     return (
         <div className='w-full px-10 py-4 flex flex-col gap-4'>
             <Navbar />
-            <div className='px-16 space-y-8'>
+            <div className='px-16 space-y-8 pb-10'>
                 <div className='h-80 w-full bg-gray-100 rounded-md flex items-center justify-center'>
                     {!recipe.recipe_pic ? (
                         <div className='border-2 border-gray-400 rounded-md p-2'>
@@ -78,7 +79,11 @@ const Detail = () => {
                     <div className='flex justify-between'>
                         <div className='space-y-1'>
                             <p className='text-lg font-bold text-gray-800 capitalize'>{recipe.recipe_name}</p>
-                            <p className='text-sm text-gray-600 capitalize'>By: {recipe.user}</p>
+                            <p className='text-sm text-gray-600 capitalize'>By: {" "}
+                                <Link to={`/profile/${recipe.user}`} className='text-blue-500 font-bold hover:underline hover:text-blue-600'>
+                                    {recipe.user}
+                                </Link>
+                            </p>
                             <p className='text-md text-gray-500'>{recipe.desc}</p>
                             <div className='flex gap-4'>
                                 <div className='flex gap-2 items-center justify-center'>
@@ -113,7 +118,7 @@ const Detail = () => {
                     </div>
                 </div>
             </div>
-
+            <Footer />
         </div>
     )
 }

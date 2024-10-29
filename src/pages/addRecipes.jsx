@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
 import AlertSave from '../fragments/AlertSave'
 import { addRecipeAsync } from '../redux/actions/recipeSlice'
+import Footer from '../fragments/Footer'
 
 const AddRecipes = () => {
     const dispatch = useDispatch();
@@ -131,7 +132,7 @@ const AddRecipes = () => {
             <div className='w-full px-10 py-4 flex flex-col gap-2'>
                 <Navbar />
                 <p className='text-2xl font-bold text-[#575d70]'>Create Recipe</p>
-                <form className='w-full flex flex-row gap-2' onSubmit={handleAddRecipe}>
+                <form className='w-full flex flex-row gap-2 pb-10' onSubmit={handleAddRecipe}>
                     <div className='w-1/2 flex flex-col gap-2'>
                         <p className='text-md text-gray-500 font-semibold'>Recipe General Info</p>
                         <div className=' border border-gray-300 rounded-md p-4 flex flex-col gap-4'>
@@ -238,7 +239,7 @@ const AddRecipes = () => {
 
                     </div>
                 </form>
-
+                <Footer/>
 
             </div>
         </>

@@ -12,6 +12,7 @@ import { buildURL } from '../koneksi'
 import { dataDetail, updateRecipeAsync } from '../redux/actions/recipeSlice'
 import AlertSave from '../fragments/AlertSave'
 import Swal from 'sweetalert2'
+import Footer from '../fragments/Footer'
 
 const EditRecipes = () => {
     const { recipe_id } = useParams();
@@ -197,7 +198,7 @@ const EditRecipes = () => {
             <div className='w-full px-10 py-4 flex flex-col gap-2'>
                 <Navbar />
                 <p className='text-2xl font-bold text-[#575d70]'>Update Recipe</p>
-                <form className='w-full flex flex-row gap-2' onSubmit={handleSubmit}>
+                <form className='w-full flex flex-row gap-2 pb-10' onSubmit={handleSubmit}>
                     <div className='w-1/2 flex flex-col gap-2'>
                         <p className='text-md text-gray-500 font-semibold'>Recipe General Info</p>
                         <div className=' border border-gray-300 rounded-md p-4 flex flex-col gap-4'>
@@ -307,6 +308,7 @@ const EditRecipes = () => {
 
                     </div>
                 </form>
+                <Footer/>
             </div>
         </>
     )
